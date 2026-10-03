@@ -1,5 +1,6 @@
 __pycache__/
 docs/notes/pending.md
+tests/toy_tests/
 *.pyc
 .venv/
 .env

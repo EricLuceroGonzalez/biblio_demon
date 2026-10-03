@@ -85,16 +85,20 @@ class NotionSync:
             self.s.notion_prop_year: "number",
             self.s.notion_prop_status: "status",
             self.s.notion_prop_authors: "rich_text",
-            self.s.notion_prop_venue: "rich_text",
+            self.s.notion_prop_venue: ("select", "rich_text"),
             self.s.notion_prop_citations: "number",
             self.s.notion_prop_subjects: "multi_select",
         }
         expected.pop("", None)
         problems = []
-        for name, kind in expected.items():
+        for name, kinds in expected.items():
+            allowed = (kinds,) if isinstance(kinds, str) else kinds
             actual = self._schema.get(name, {}).get("type")
-            if actual != kind:
-                problems.append(f"'{name}' debe ser {kind} (es {actual or 'ausente'})")
+            if actual not in allowed:
+                kinds_txt = " o ".join(allowed)
+                problems.append(
+                    f"'{name}' debe ser {kinds_txt} (es {actual or 'ausente'})"
+                )
         status_options = {
             o["name"]
             for o in self._schema.get(self.s.notion_prop_status, {})
@@ -110,6 +114,12 @@ class NotionSync:
             raise SyncError("Notion: esquema inválido: " + "; ".join(problems))
 
     # ------------------------------------------------------------- páginas
+    def _prop_type(self, name: str) -> str | None:
+        """Tipo de una propiedad según el esquema cargado (``None`` si no se cargó)."""
+        if self._schema is None:
+            return None
+        return self._schema.get(name, {}).get("type")
+
     def build_properties(self, meta: PaperMetadata) -> dict[str, Any]:
         year = meta.year if meta.year else "s.f."
         title = f"{meta.title} ({meta.first_author_family}, {year})"
@@ -124,7 +134,11 @@ class NotionSync:
         }
         # Opcionales: se omiten si la variable NOTION_PROP_* está vacía.
         if self.s.notion_prop_venue and meta.venue:
-            props[self.s.notion_prop_venue] = {"select": _option(meta.venue)}
+            # "Revista" puede ser Select o Text: se envía en el tipo que tenga la base.
+            if self._prop_type(self.s.notion_prop_venue) == "rich_text":
+                props[self.s.notion_prop_venue] = {"rich_text": _rich_text(meta.venue)}
+            else:
+                props[self.s.notion_prop_venue] = {"select": _option(meta.venue)}
         if self.s.notion_prop_citations:
             props[self.s.notion_prop_citations] = {"number": meta.citation_count}
         if self.s.notion_prop_subjects and meta.subjects:

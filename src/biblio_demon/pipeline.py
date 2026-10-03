@@ -154,7 +154,8 @@ class Pipeline:
         Nunca lanza excepciones por fallos esperables: los PDFs problemáticos
         terminan en ``manual_review/`` y el resultado indica el motivo.
         """
-        print(f"Procesando {pdf_path.name} ...", end="", flush=True)
+        # print(f"Procesando {pdf_path.name} ...", end="", flush=True)
+        logger.info("Procesando %s", pdf_path.name)
         if not pdf_path.is_file():
             return ProcessResult(Outcome.SKIPPED, pdf_path, reasons=["ya no existe"])
 
