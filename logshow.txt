@@ -1,0 +1,5 @@
+2026-10-03 21:01:58.978 Df launchd[1:301ca1] [gui/501/com.biblio-demon [5715]:] internal event: EXITED, code = 0
+2026-10-03 21:01:58.978 Df launchd[1:301ca1] [gui/501 [100021]:] service inactive: com.biblio-demon
+2026-10-03 21:01:58.978 Df launchd[1:301ca1] [gui/501/com.biblio-demon [5715]:] service state: not running
+2026-10-03 21:01:58.978 Df launchd[1:301ca1] [gui/501/com.biblio-demon:] internal event: WILL_SPAWN, code = 0
+2026-10-03 21:01:58.978 Df launchd[1:301ca1] [gui/501/com.biblio-demon:] service state: spawn scheduled

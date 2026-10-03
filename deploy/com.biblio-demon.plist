@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  LaunchAgent de macOS para biblio-demon.
+  __REPO__ se sustituye por la ruta absoluta del repositorio (ver README,
+  sección "Servicio en segundo plano → macOS").
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.biblio-demon</string>
+
+    <!-- Se usa el ejecutable del entorno virtual: launchd no carga el PATH
+         de tu shell, así que no puede encontrar `uv` por sí solo. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>__REPO__/.venv/bin/biblio-demon</string>
+        <string>run</string>
+    </array>
+
+    <!-- El .env y la carpeta logs/ se buscan aquí -->
+    <key>WorkingDirectory</key>
+    <string>__REPO__</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PYTHONUNBUFFERED</key>
+        <string>1</string>
+    </dict>
+
+    <!-- Arranca al iniciar sesión -->
+    <key>RunAtLoad</key>
+    <true/>
+    <!-- Lo reinicia si termina con error (no si lo detienes tú) -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+    <!-- Mínimo 30 s entre reinicios -->
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <key>StandardOutPath</key>
+    <string>__REPO__/logs/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__REPO__/logs/launchd.err.log</string>
+</dict>
+</plist>

@@ -1,0 +1,25 @@
+# systemd --user (Linux). Sustituye __REPO__ y __UV__ (salida de `which uv`).
+# Instalación:
+#   mkdir -p ~/.config/systemd/user
+#   cp deploy/biblio-demon.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now biblio-demon
+#   loginctl enable-linger "$USER"   # opcional: arrancar sin iniciar sesión
+[Unit]
+Description=biblio-demon: catalogación de PDFs científicos
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/Users/ericlucero/Developer/biblio_demon
+
+ExecStart=/opt/homebrew/bin/uv run --project /Users/ericlucero/Developer/biblio_demon
+ biblio-demon run
+Restart=on-failure
+RestartSec=30
+# Salida a journald; además se escribe en LOG_DIR/biblio_demon.log
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

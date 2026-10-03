@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help setup test lint format check diagrams clean
+.PHONY: help setup run dry-run test lint format check diagrams clean
 
 help:  ## Muestra esta ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
@@ -7,6 +7,12 @@ help:  ## Muestra esta ayuda
 setup:  ## Crea el entorno e instala dependencias (uv)
 	uv sync
 	uv run pre-commit install || true
+
+run:  ## Arranca el demonio (lee .env)
+	uv run biblio-demon run
+
+dry-run:  ## Demonio en modo simulación (no mueve ni sincroniza)
+	uv run biblio-demon run --dry-run
 
 test:  ## Ejecuta los tests con cobertura
 	uv run pytest

@@ -1,19 +1,33 @@
 [project]
 name = "biblio-demon"
 version = "0.1.0"
-description = "Python managed bibliography with metadata-centered organization. Syncronizing local files and Zotero."
+description = "Demonio local que cataloga PDFs científicos vía DOI y los sincroniza con Zotero y Notion."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Eric Lucero Gonzalez", email = "ericlucerog@gmail.com" }]
-dependencies = []
+dependencies = [
+    "notion-client==3.1.0",
+    "pydantic-settings==2.15.0",
+    "pymupdf==1.28.2",
+    "python-dotenv==1.2.4",
+    "pyzotero==1.15.2",
+    "rapidfuzz==3.14.6",
+    "requests==2.34.2",
+    "tenacity==9.1.4",
+    "watchdog==6.0.0",
+]
+
+[project.scripts]
+biblio-demon = "biblio_demon.__main__:main"
 
 [dependency-groups]
 dev = [
     "pytest>=8",
     "pytest-cov>=5",
     "ruff>=0.6",
-    "pylint>=3",   # incluye pyreverse para diagramas UML
+    "pylint>=3", # incluye pyreverse para diagramas UML
     "pre-commit>=3",
+    "responses==0.26.3",
 ]
 
 [build-system]
