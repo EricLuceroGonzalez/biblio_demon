@@ -52,13 +52,18 @@ def sanitize_filename(name: str) -> str:
     return _ILLEGAL.sub("_", name).strip(" .")
 
 
-def title_slug(title: str, n_words: int, drop_leading_stopwords: bool = True) -> str:
-    """Primeras ``n_words`` palabras del título, en ASCII, unidas por ``_``."""
+def title_slug(
+    title: str,
+    n_words: int,
+    drop_leading_stopwords: bool = True,
+    separator: str = "-",
+) -> str:
+    """Primeras ``n_words`` palabras del título, en ASCII, unidas por ``separator``."""
     words = _WORD.findall(to_ascii(title))
     if drop_leading_stopwords:
         while len(words) > 1 and words[0].lower() in LEADING_STOPWORDS:
             words.pop(0)
-    return "_".join(words[:n_words]) or "Untitled"
+    return separator.join(words[:n_words]) or "Untitled"
 
 
 def family_slug(family: str) -> str:
@@ -78,14 +83,17 @@ def authors_slug(meta: PaperMetadata) -> str:
 
 
 def build_filename(
-    meta: PaperMetadata, n_words: int = 6, drop_leading_stopwords: bool = True
+    meta: PaperMetadata,
+    n_words: int = 6,
+    drop_leading_stopwords: bool = True,
+    separator: str = "-",
 ) -> str:
     """Nombre de archivo final (con ``.pdf``) para unos metadatos."""
     year = str(meta.year) if meta.year else "nd"
     authors = authors_slug(meta)
     words = n_words
     while True:
-        slug = title_slug(meta.title, words, drop_leading_stopwords)
+        slug = title_slug(meta.title, words, drop_leading_stopwords, separator)
         name = sanitize_filename(f"({year})-{slug}-({authors}).pdf")
         if len(name.encode()) <= MAX_FILENAME_BYTES or words == 1:
             return name

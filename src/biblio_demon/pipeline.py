@@ -189,7 +189,10 @@ class Pipeline:
             return to_review(reasons)
 
         filename = build_filename(
-            meta, self.s.filename_title_words, self.s.drop_leading_stopwords
+            meta,
+            self.s.filename_title_words,
+            self.s.drop_leading_stopwords,
+            self.s.filename_word_separator,
         )
         destination = unique_destination(self.s.archive_path, filename, file_hash)
 

@@ -44,6 +44,7 @@ class Settings(BaseSettings):
     # --- Nombre de archivo -------------------------------------------------
     filename_title_words: int = Field(default=6, ge=1)
     drop_leading_stopwords: bool = True
+    filename_word_separator: Literal["-", "_"] = "-"
 
     # --- Watcher -----------------------------------------------------------
     stable_checks: int = Field(default=3, ge=1)
