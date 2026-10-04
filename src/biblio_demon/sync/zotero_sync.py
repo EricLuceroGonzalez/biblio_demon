@@ -48,6 +48,7 @@ class ZoteroSync:
             )
         self.zot = client
         self.collection_key = settings.zotero_collection_key
+        self.attach_pdf = settings.zotero_attach_pdf
 
     # ---------------------------------------------------------------- consultas
     def find_existing(self, doi: str) -> str | None:
@@ -143,7 +144,7 @@ class ZoteroSync:
             else:
                 key = self._create([self.build_item(meta)])
                 logger.info("Zotero: creado %s para %s", key, meta.doi)
-            if not self._has_linked_pdf(key, pdf_path):
+            if self.attach_pdf and not self._has_linked_pdf(key, pdf_path):
                 att = self._attach_linked_pdf(key, pdf_path)
                 logger.info("Zotero: PDF enlazado (%s)", att)
             return key

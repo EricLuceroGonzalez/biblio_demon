@@ -71,7 +71,9 @@ Crossref ya casi no publica áreas temáticas, así que, si la fuente principal 
   - en otro Mac solo se abre si la ruta es idéntica (mismo usuario y misma carpeta de iCloud);
   - **Zotero para iPad/iPhone no abre archivos enlazados**: ahí abre el PDF desde la app Archivos (`_Ready`).
 - Opcional: con `ZOTERO_COLLECTION_KEY` (8 caracteres, aparece en la URL de la colección) los elementos se crean dentro de esa colección.
-
+- Con `ZOTERO_ATTACH_PDF=false` Zotero recibe solo los metadatos (título, autores, revista, volumen, número, páginas, DOI, abstract y tags), sin adjunto. Es lo recomendable si mueves los PDFs a mano fuera de `ARCHIVE_PATH`.
+- Con `ZOTERO_ATTACH_PDF=true` (por defecto) el PDF se adjunta como **archivo enlazado** con su ruta absoluta en `ARCHIVE_PATH`. No consume cuota, pero el enlace se rompe si mueves o renombras el archivo, y Zotero para iPad/iPhone no abre archivos enlazados.
+  
 ### Notion
 
 La base de datos necesita estas propiedades. Los nombres se pueden cambiar con `NOTION_PROP_*`; las tres últimas son opcionales (deja la variable vacía para desactivarlas).

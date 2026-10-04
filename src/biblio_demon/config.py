@@ -54,7 +54,8 @@ class Settings(BaseSettings):
     zotero_api_key: SecretStr | None = None
     zotero_library_type: Literal["user", "group"] = "user"
     zotero_collection_key: str | None = None
-
+    # False: solo metadatos, sin adjuntar el PDF (útil si los PDFs se mueven a mano)
+    zotero_attach_pdf: bool = False
     # --- Notion ------------------------------------------------------------
     notion_token: SecretStr | None = None
     notion_database_id: str | None = None
